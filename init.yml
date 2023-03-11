@@ -1,0 +1,14 @@
+- hosts: "{{ hosts | default('local') }}"
+  gather_facts: true
+  tasks:
+    - name: 安装基础软件包
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - "epel-release"
+        - "wget"
+        - "curl"
+        - "git"
+        - "unzip"
+        - "net-tools"

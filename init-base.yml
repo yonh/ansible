@@ -1,0 +1,13 @@
+- hosts: "{{ hosts | default('local') }}"
+  gather_facts: true
+  become: true
+  become_user: root
+  tasks:
+    - name: 安装基础软件包
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - "rsync"
+          - "git"
+          - "curl"
+          - "vim"

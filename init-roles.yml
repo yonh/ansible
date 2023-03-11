@@ -1,0 +1,6 @@
+- hosts: "{{ hosts | default('local') }}"
+  gather_facts: true
+  become: true
+  roles:
+    - chrony
+
