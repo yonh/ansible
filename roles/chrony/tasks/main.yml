@@ -1,0 +1,22 @@
+---
+- name: 安装 chrony
+  yum:
+    name: chrony
+    state: latest
+
+- name: 配置 chrony 时间同步服务器 -> ntp.aliyun.com
+  lineinfile:
+    path: /etc/chrony.conf
+    regex: '^server'
+    line: 'server ntp1.aliyun.com iburst'
+    state: present
+  notify: restart chronyd
+
+- name: 设置时区 -> Asia/Shanghai
+  timezone:
+    name: Asia/Shanghai
+
+- name: 开启 chrony 服务开机自启动
+  systemd:
+    name: chronyd.service
+    enabled: yes

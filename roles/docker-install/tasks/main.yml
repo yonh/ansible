@@ -1,0 +1,42 @@
+---
+- name: set mydistribution
+  ansible.builtin.set_fact:
+    mydistribution: "{{ 'rhel' if (ansible_distribution == 'Red Hat Enterprise Linux') else (ansible_distribution | lower) }}"
+
+- name: Add signing key
+  ansible.builtin.rpm_key:
+    key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
+    state: present
+#    - name: Add repository
+#      ansible.builtin.yum_repository:
+#        name: docker
+#        description: docker yum repo
+#        baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Add repository into repo.d list
+  ansible.builtin.yum_repository:
+    name: docker
+    description: docker repository
+    baseurl: "https://download.docker.com/linux/{{ mydistribution }}/$releasever/$basearch/stable"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
+
+- name: install docker
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "docker-ce"
+    - "docker-compose-plugin"
+
+- name: 启动服务 -> docker
+  ansible.builtin.systemd:
+    name: docker.socket
+    state: started
+
+- name: 设置服务开机启动 -> docker
+  ansible.builtin.systemd:
+    name: docker.socket
+    enabled: yes
+    masked: no

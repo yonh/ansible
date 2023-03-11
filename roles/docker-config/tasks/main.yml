@@ -1,0 +1,13 @@
+---
+- name: 如果 /etc/docker 不存在则创建
+  file:
+    path: "/etc/docker/"
+    state: directory
+    mode: '0710'
+
+- name: copy daemon.json
+  template:
+   src: "daemon.json"
+   dest: "/etc/docker/daemon.json"
+  notify: restart docker
+
