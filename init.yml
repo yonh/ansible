@@ -3,12 +3,12 @@
   tasks:
     - name: 安装基础软件包
       yum:
-        name: "{{ item }}"
+        name:
+          - "epel-release"
+          - "wget"
+          - "curl"
+          - "git"
+          - "unzip"
+          - "net-tools"
         state: latest
-      with_items:
-        - "epel-release"
-        - "wget"
-        - "curl"
-        - "git"
-        - "unzip"
-        - "net-tools"
+
