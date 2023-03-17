@@ -1,0 +1,17 @@
+---
+- name: 如果 {{ jenkins_dir }} 不存在则创建
+  file:
+    path: "{{ jenkins_dir }}"
+    state: directory
+    mode: '0710'
+
+# 复制配置文件
+- name: Copy Docker Compose file
+  copy:
+    src: docker-compose.yml
+    dest: "{{ jenkins_dir }}/docker-compose.yml"
+
+- name: 启动 jenkins 容器
+  ansible.builtin.command: docker compose up -d
+  args:
+    chdir: "{{ jenkins_dir }}"
