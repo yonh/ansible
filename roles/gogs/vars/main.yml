@@ -1,0 +1,4 @@
+---
+# Gogs app settings
+gogs_dir: "/home/docker/gogs2"
+gogs_data_dir: "{{ gogs_dir }}/data"
